@@ -9,6 +9,7 @@ public class GrabVirtualHand : MonoBehaviour
     public VirtualHandManager virtualHandManager;
 
     private XRGrabInteractable grab;
+    private bool transferring = false;   // 🔑 guard flag
 
     void Awake()
     {
@@ -23,6 +24,10 @@ public class GrabVirtualHand : MonoBehaviour
 
     void OnGrabbed(SelectEnterEventArgs args)
     {
+        // Stop infinite recursion
+        if (transferring)
+            return;
+
         if (virtualHandManager == null || ghostHandSocket == null)
             return;
 
@@ -33,16 +38,19 @@ public class GrabVirtualHand : MonoBehaviour
         if (manager == null)
             return;
 
-        // Release from the controller that grabbed it
+        transferring = true;
+
+        // Release from controller
         manager.SelectExit(
-            args.interactorObject,              // IXRSelectInteractor
-            (IXRSelectInteractable)grab         // IXRSelectInteractable
+            args.interactorObject,
+            (IXRSelectInteractable)grab
         );
 
-        // Force the ghost hand socket to select it
+        // Hand to ghost hand socket
         manager.SelectEnter(
             (IXRSelectInteractor)ghostHandSocket,
             (IXRSelectInteractable)grab
         );
     }
 }
+
