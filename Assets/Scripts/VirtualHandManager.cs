@@ -3,16 +3,15 @@ using UnityEngine;
 
 public class VirtualHandManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    public GameObject ghostHand; //virtual hand 
+    public UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor ghostSocket; //socket on virtual hand
 
-    public GameObject ghostHand;
-    public UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor ghostSocket;
-
-    public bool secondHandActive = false;
+    public bool secondHandActive = false; 
 
     void Start()
     {
-        ghostHand.SetActive(false);
+        ghostHand.SetActive(false); //virtual hand is hidden in the beginning
     }
 
     // Update is called once per frame
@@ -21,4 +20,5 @@ public class VirtualHandManager : MonoBehaviour
         secondHandActive = !secondHandActive;
         ghostHand.SetActive(secondHandActive);
     }
+    //function called by UI button. If virtual hand is off when pressed virtual hand becomes active and state becomes active, and vice versa
 }
